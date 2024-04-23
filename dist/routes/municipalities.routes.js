@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const municipalities_controllers_1 = require("../controllers/municipalities.controllers");
+const municipalities_validations_1 = require("../validations/municipalities.validations");
+const router = (0, express_1.Router)();
+router.get('/', municipalities_controllers_1.getMunicipalities);
+router.get('/:id', municipalities_controllers_1.getMunicipality);
+router.post('/', municipalities_validations_1.postMunicipalityValidation, municipalities_controllers_1.postMunicipality);
+router.delete('/:id', municipalities_controllers_1.deleteMunicipality);
+router.put('/:id', municipalities_validations_1.updateMunicipalityValidation, municipalities_controllers_1.updateMunicipality);
+exports.default = router;

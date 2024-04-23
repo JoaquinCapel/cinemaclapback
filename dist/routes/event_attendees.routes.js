@@ -5,6 +5,9 @@ const event_attendees_controllers_1 = require("../controllers/event_attendees.co
 const event_attendees_validations_1 = require("../validations/event_attendees.validations");
 const generic_validations_1 = require("../validations/generic.validations");
 const router = (0, express_1.Router)();
+router.get('/', event_attendees_controllers_1.getEventAttendees);
+router.get('/:eventId/:userId', generic_validations_1.idValidator, event_attendees_controllers_1.getEventAttendee);
 router.post('/event-attendee', event_attendees_validations_1.eventAttendeeValidator, event_attendees_controllers_1.postEventAttendee);
-router.put('/event-attendee/:eventId/:userId', generic_validations_1.idValidator, event_attendees_validations_1.eventAttendeeValidator, event_attendees_controllers_1.updateEventAttendee);
+router.delete('/:eventId/:userId', generic_validations_1.idValidator, event_attendees_controllers_1.deleteEventAttendee);
+router.put('/:eventId/:userId', event_attendees_controllers_1.updateEventAttendee);
 exports.default = router;

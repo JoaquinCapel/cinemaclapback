@@ -2,6 +2,25 @@ import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import Event from '../models/events.models';
 
+export const getEvents = async (req: Request, res: Response) => {
+
+    const listEvents = await Event.findAll();
+    res.json(listEvents);
+}
+
+export const getEvent = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const event = await Event.findByPk(id);
+
+    if (event) {
+        res.json(event);
+    } else {
+        res.status(404).json({
+            msg: `ERROR 404. No existe un evento con el id ${id}`
+        });
+    };
+}
+
 export const postEvent = async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

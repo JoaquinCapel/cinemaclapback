@@ -12,9 +12,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateEvent = exports.postEvent = void 0;
+exports.updateEvent = exports.postEvent = exports.getEvent = exports.getEvents = void 0;
 const express_validator_1 = require("express-validator");
 const events_models_1 = __importDefault(require("../models/events.models"));
+const getEvents = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const listEvents = yield events_models_1.default.findAll();
+    res.json(listEvents);
+});
+exports.getEvents = getEvents;
+const getEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const event = yield events_models_1.default.findByPk(id);
+    if (event) {
+        res.json(event);
+    }
+    else {
+        res.status(404).json({
+            msg: `ERROR 404. No existe un evento con el id ${id}`
+        });
+    }
+    ;
+});
+exports.getEvent = getEvent;
 const postEvent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {

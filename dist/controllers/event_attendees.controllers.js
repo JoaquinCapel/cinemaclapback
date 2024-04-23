@@ -12,9 +12,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateEventAttendee = exports.postEventAttendee = void 0;
+exports.updateEventAttendee = exports.deleteEventAttendee = exports.postEventAttendee = exports.getEventAttendee = exports.getEventAttendees = void 0;
 const express_validator_1 = require("express-validator");
 const event_attendees_models_1 = __importDefault(require("../models/event_attendees.models"));
+const getEventAttendees = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const listEventAttendees = yield event_attendees_models_1.default.findAll();
+    res.json(listEventAttendees);
+});
+exports.getEventAttendees = getEventAttendees;
+const getEventAttendee = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { eventId, userId } = req.params;
+    const eventAttendee = yield event_attendees_models_1.default.findOne({
+        where: {
+            event_id: eventId,
+            user_id: userId
+        }
+    });
+    if (eventAttendee) {
+        res.json(eventAttendee);
+    }
+    else {
+        res.status(404).json({
+            msg: `ERROR 404. No existe un asistente al evento con el id ${userId}`
+        });
+    }
+    ;
+});
+exports.getEventAttendee = getEventAttendee;
 const postEventAttendee = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
@@ -34,6 +58,27 @@ const postEventAttendee = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.postEventAttendee = postEventAttendee;
+const deleteEventAttendee = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { eventId, userId } = req.params;
+    if (!Number.isInteger(Number(eventId)) || !Number.isInteger(Number(userId))) {
+        return res.status(400).json({
+            msg: 'ERROR 400. eventId y userId deben ser números'
+        });
+    }
+    const eventAttendee = yield event_attendees_models_1.default.findOne({ where: { event_id: eventId, user_id: userId } });
+    if (!eventAttendee) {
+        return res.status(404).json({
+            msg: `ERROR 404. No existe un asistente al evento con event_id ${eventId} y user_id ${userId}`
+        });
+    }
+    else {
+        yield eventAttendee.destroy();
+        res.json({
+            msg: `El asistente al evento con event_id ${eventId} y user_id ${userId} ha sido eliminado con éxito`
+        });
+    }
+});
+exports.deleteEventAttendee = deleteEventAttendee;
 const updateEventAttendee = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {

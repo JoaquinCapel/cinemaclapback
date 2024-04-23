@@ -13,8 +13,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
 const users_routes_1 = __importDefault(require("../routes/users.routes"));
 const events_routes_1 = __importDefault(require("../routes/events.routes"));
+const event_attendees_routes_1 = __importDefault(require("../routes/event_attendees.routes"));
+const languages_routes_1 = __importDefault(require("../routes/languages.routes"));
+const municipalities_routes_1 = __importDefault(require("../routes/municipalities.routes"));
 const connection_1 = __importDefault(require("../db/connection"));
 class Server {
     constructor() {
@@ -38,9 +42,13 @@ class Server {
         });
         this.app.use('/users', users_routes_1.default);
         this.app.use('/events', events_routes_1.default);
+        this.app.use('/eventattendees', event_attendees_routes_1.default);
+        this.app.use('/languages', languages_routes_1.default);
+        this.app.use('/municipalities', municipalities_routes_1.default);
     }
     midlewares() {
         this.app.use(express_1.default.json());
+        this.app.use((0, cors_1.default)());
     }
     dbConnection() {
         return __awaiter(this, void 0, void 0, function* () {

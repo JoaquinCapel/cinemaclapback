@@ -1,10 +1,10 @@
 
-Se necesita tener instalado nodemon y typescript. Levantaremos el servidor con el siguiente comando:
+Nodemon and TypeScript need to be installed. You can start the server with the following command:
 ```bash
 npm start
 ```
 
-*Instalar express validator
+*Toinstall express-validator, use the following command:
 ```bash
 npm install --save express-validator
 ```
